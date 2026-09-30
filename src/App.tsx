@@ -2,6 +2,7 @@ import type { Song } from './types/song'
 import SongInfo from './components/SongInfo'
 import SectionList from './components/SectionList'
 import { useState } from 'react'
+import { calculateSectionDuration } from './utils/songTiming'
 
 
 const song: Song = {
@@ -26,12 +27,21 @@ const song: Song = {
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0)
+
+  const currentSectionDuration = calculateSectionDuration(
+    song,
+    song.sections[currentSection],
+  )
   
   return (
     <>
       <h1>CifraSync</h1>
 
       <SongInfo song={song} />
+
+      <p>
+        Duração da seção: {currentSectionDuration.toFixed(2)} segundos
+      </p>
 
       <p>Seção atual: {song.sections[currentSection].name}</p>
 
