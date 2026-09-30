@@ -1,8 +1,8 @@
 import type { Song } from './types/song'
 import SongInfo from './components/SongInfo'
 import SectionList from './components/SectionList'
-import { useState } from 'react'
 import { calculateSectionDuration } from './utils/songTiming'
+import { useEffect, useState } from 'react'
 
 
 const song: Song = {
@@ -32,6 +32,19 @@ function App() {
     song,
     song.sections[currentSection],
   )
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currentSection < song.sections.length - 1) {
+        setCurrentSection(currentSection + 1)
+      }
+    }, currentSectionDuration * 1000)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [currentSection, currentSectionDuration])
+  
   
   return (
     <>
@@ -62,5 +75,6 @@ function App() {
     </>
   )
 }
+
 
 export default App
