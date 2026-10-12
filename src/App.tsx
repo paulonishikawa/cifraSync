@@ -27,11 +27,21 @@ const song: Song = {
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0)
+  const [elapsedTime, setElapsedTime] = useState(0)
 
   const currentSectionDuration = calculateSectionDuration(
     song,
     song.sections[currentSection],
   )
+
+  const progress = Math.min(
+    elapsedTime / currentSectionDuration,
+    1,
+  )
+
+  useEffect(() => {
+    setElapsedTime(0)
+  }, [currentSection])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,6 +54,26 @@ function App() {
       clearTimeout(timer)
     }
   }, [currentSection, currentSectionDuration])
+
+  useEffect(() => {
+    const startTime = Date.now()
+
+    const interval = setInterval(() => {
+      const elapsed = (Date.now() - startTime) / 1000
+
+      if (elapsed >= currentSectionDuration) {
+        setElapsedTime(currentSectionDuration)
+        clearInterval(interval)
+        return
+      }
+
+      setElapsedTime(elapsed)
+    }, 100)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [currentSection, currentSectionDuration])
   
   
   return (
@@ -52,11 +82,14 @@ function App() {
 
       <SongInfo song={song} />
 
-      <p>
-        Duração da seção: {currentSectionDuration.toFixed(2)} segundos
-      </p>
-
       <p>Seção atual: {song.sections[currentSection].name}</p>
+
+      <div className="progress-bar">
+        <div
+          className="progress-bar-fill"
+          style={{ width: `${progress * 100}%` }}
+        />
+      </div>
 
       <button 
         onClick={() => {
