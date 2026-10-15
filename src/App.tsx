@@ -11,16 +11,35 @@ const song: Song = {
   beatsPerBar: 4,
   sections: [
     {
+      id: 'intro',
       name: 'Intro',
       bars: 4,
+      lines: [
+        {
+          text: 'Quando estou',
+          chords: [
+            {
+              position: 0,
+              chord: {
+                root: 0,
+                suffix: '',
+              },
+            },
+          ],
+        },
+      ],
     },
     {
+      id: 'verso',
       name: 'Verso',
       bars: 8,
+      lines: []
     },
     {
+      id: 'refrao',
       name: 'Refrão',
       bars: 8,
+      lines: [],
     },
   ],
 }
