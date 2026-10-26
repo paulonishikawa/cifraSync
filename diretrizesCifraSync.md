@@ -990,3 +990,55 @@ O objetivo é construir um aplicativo real enquanto o usuário se torna progress
 ---
 
 FIM DAS DIRETRIZES — CIFRASYNC v1.0
+
+
+## Estado atual do desenvolvimento
+
+### Tecnologias
+- React
+- TypeScript
+- Vite
+- CSS
+- Git e GitHub
+
+### Funcionalidades implementadas
+- Tipos Song e Section.
+- Componentes SongInfo, SectionList e Section.
+- Seleção da seção atual com useState.
+- Cálculo da duração de uma seção a partir do BPM,
+  dos compassos e das batidas por compasso.
+- Avanço automático entre as seções com setTimeout.
+- Contador de tempo decorrido com setInterval.
+- Reinício do contador quando a seção muda.
+- Barra visual de progresso calculada a partir de progress.
+- Encerramento do contador e da barra ao final da última seção.
+
+### Arquivos importantes
+- src/App.tsx: estado, temporizadores e fluxo principal.
+- src/types/song.ts: tipos Song e Section.
+- src/utils/songTiming.ts: cálculo de duração.
+- src/components/SongInfo.tsx: informações da música.
+- src/components/SectionList.tsx: lista de seções.
+- src/components/Section.tsx: representação de uma seção.
+- src/index.css: estilos da aplicação.
+
+### Dados de teste
+- Música: Mais Que Vencedores.
+- BPM: 82.
+- Batidas por compasso: 4.
+- Intro: 4 compassos.
+- Verso: 8 compassos.
+- Refrão: 8 compassos.
+
+### Próximo passo confirmado
+Remover os textos numéricos temporários de duração e
+tempo decorrido do App.tsx, mantendo o estado e os efeitos
+necessários para a barra de progresso.
+
+Depois, testar a interface e avaliar um commit para a
+funcionalidade da barra de progresso.
+
+### Regras de continuidade
+Não considerar uma alteração concluída apenas porque o
+código foi sugerido. Confirmar o resultado com o usuário.
+Consultar sempre o código atual antes de propor mudanças.
