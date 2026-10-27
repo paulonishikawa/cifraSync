@@ -26,3 +26,19 @@ body {
   background-color: #4caf50;
   transition: width 0.1s linear;
 }
+
+.lyric-line-chords {
+  position: relative;
+  height: 1.5em;
+  font-family: monospace;
+}
+
+.chord {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.lyric-line-text {
+  font-family: monospace;
+  white-space: pre;
+}
