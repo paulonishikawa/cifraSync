@@ -3,6 +3,7 @@ import SongInfo from './components/SongInfo'
 import SectionList from './components/SectionList'
 import { calculateSectionDuration } from './utils/songTiming'
 import { useEffect, useState } from 'react'
+import LyricLineView from './components/LyricLineView'
 
 
 const song: Song = {
@@ -22,6 +23,13 @@ const song: Song = {
               position: 0,
               chord: {
                 root: 0,
+                suffix: '',
+              },
+            },
+            {
+              position: 8,
+              chord: {
+                root: 7,
                 suffix: '',
               },
             },
@@ -102,6 +110,9 @@ function App() {
       <SongInfo song={song} />
 
       <p>Seção atual: {song.sections[currentSection].name}</p>
+      <LyricLineView
+        line={song.sections[0].lines[0]}
+      />
 
       <div className="progress-bar">
         <div
