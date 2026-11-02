@@ -4,6 +4,7 @@ import SectionList from './components/SectionList'
 import { calculateSectionDuration } from './utils/songTiming'
 import { useEffect, useState } from 'react'
 import LyricLineView from './components/LyricLineView'
+import Metronome from './components/Metronome'
 
 
 const song: Song = {
@@ -15,60 +16,40 @@ const song: Song = {
       id: 'intro',
       name: 'Intro',
       bars: 4,
-      lines: [
-        {
-          text: 'Quando estou',
-          chords: [
-            {
-              position: 0,
-              chord: {
-                root: 0,
-                suffix: '',
-              },
-            },
-            {
-              position: 8,
-              chord: {
-                root: 7,
-                suffix: '',
-              },
-            },
-          ],
-        },
-      ],
+      dynamics: 'Suave',
+      content:
+`C                     G
+Quando estou em Tua presença
+Am              F
+Encontro paz e direção`,
     },
     {
       id: 'verso',
       name: 'Verso',
       bars: 8,
-      lines: []
+      dynamics: 'Suave',
+      content: '',
     },
     {
       id: 'refrao',
       name: 'Refrão',
       bars: 8,
-      lines: [],
+      dynamics: 'Forte',
+      content: '',
     },
   ],
 }
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0)
-  const [elapsedTime, setElapsedTime] = useState(0)
+  const [metronomeSubdivision, setMetronomeSubdivision] = useState<
+    'quarter' | 'eighth'
+  >('quarter')  
 
   const currentSectionDuration = calculateSectionDuration(
     song,
     song.sections[currentSection],
   )
-
-  const progress = Math.min(
-    elapsedTime / currentSectionDuration,
-    1,
-  )
-
-  useEffect(() => {
-    setElapsedTime(0)
-  }, [currentSection])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -82,44 +63,40 @@ function App() {
     }
   }, [currentSection, currentSectionDuration])
 
-  useEffect(() => {
-    const startTime = Date.now()
-
-    const interval = setInterval(() => {
-      const elapsed = (Date.now() - startTime) / 1000
-
-      if (elapsed >= currentSectionDuration) {
-        setElapsedTime(currentSectionDuration)
-        clearInterval(interval)
-        return
-      }
-
-      setElapsedTime(elapsed)
-    }, 100)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [currentSection, currentSectionDuration])
-  
-  
   return (
     <>
       <h1>CifraSync</h1>
 
       <SongInfo song={song} />
 
-      <p>Seção atual: {song.sections[currentSection].name}</p>
-      <LyricLineView
-        line={song.sections[0].lines[0]}
-      />
+      <div className="performance-info">
+        <span>{song.sections[currentSection].name}</span>
 
-      <div className="progress-bar">
-        <div
-          className="progress-bar-fill"
-          style={{ width: `${progress * 100}%` }}
-        />
+        <div className="performance-controls">
+          <span>{song.sections[currentSection].dynamics}</span>
+
+          <Metronome
+            bpm={song.bpm}
+            subdivision={metronomeSubdivision}
+          />
+
+          <select
+            value={metronomeSubdivision}
+            onChange={(event) => {
+              setMetronomeSubdivision(
+                event.target.value as 'quarter' | 'eighth'
+              )
+            }}
+          >
+            <option value="quarter">Semínima</option>
+            <option value="eighth">Colcheia</option>
+          </select>
+        </div>
       </div>
+
+      <LyricLineView
+        content={song.sections[currentSection].content}
+      />
 
       <button 
         onClick={() => {

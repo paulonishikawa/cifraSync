@@ -27,18 +27,53 @@ body {
   transition: width 0.1s linear;
 }
 
-.lyric-line-chords {
-  position: relative;
-  height: 1.5em;
-  font-family: monospace;
-}
-
-.chord {
-  position: absolute;
-  white-space: nowrap;
-}
-
-.lyric-line-text {
+.lyrics {
   font-family: monospace;
   white-space: pre;
+  overflow-x: auto;
+}
+
+.chord-line {
+  font-weight: bold;
+  line-height: 1;
+}
+
+.lyric-line {
+  font-weight: normal;
+  line-height: 1;
+  margin-bottom: 0.7em;
+}
+
+.metronome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.metronome-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #9ca3af;
+  transition: transform 100ms ease, background-color 100ms ease;
+}
+
+.metronome-dot.active {
+  transform: scale(1.6);
+  background-color: #16a34a;
+}
+
+.performance-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.performance-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }

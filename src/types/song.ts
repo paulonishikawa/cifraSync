@@ -2,22 +2,8 @@ type Section = {
     id: string
     name: string
     bars: number
-    lines: LyricLine[]
-}
-
-type Chord = {
-    root: number
-    suffix: string
-}
-
-type ChordPlacement = {
-    position: number
-    chord: Chord
-}
-
-type LyricLine = {
-    text: string
-    chords: ChordPlacement[]
+    content: string
+    dynamics: string
 }
 
 type Song = {
@@ -27,4 +13,4 @@ type Song = {
     sections: Section[]
 }
 
-export type { Song, Section, Chord, ChordPlacement, LyricLine }
+export type { Song, Section }

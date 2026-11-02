@@ -1,31 +1,20 @@
-import type { LyricLine } from '../types/song'
-import { getNoteName } from '../utils/noteNames'
-
 type LyricLineViewProps = {
-    line: LyricLine
+    content: string
 }
 
-function LyricLineView({ line }: LyricLineViewProps) {
-    return (
-        <div className="lyric-line">
-            <div className="lyric-line-chords">
-                {line.chords.map((placement) => (
-                    <span 
-                        key={placement.position}
-                        className="chord"
-                        style={{
-                            left: `${placement.position}ch`,
-                        }}
-                    >
-                        {getNoteName(placement.chord.root)}
-                        {placement.chord.suffix}
-                    </span>
-                ))}
-            </div>
+function LyricLineView({ content }: LyricLineViewProps) {
+    const lines = content.split('\n')
 
-            <div className="lyric-line-text">
-                {line.text}
-            </div>
+    return (
+        <div className="lyrics">
+            {lines.map((line, index) => (
+                <div
+                    key={index}
+                    className={index % 2 === 0 ? 'chord-line' : 'lyric-line'}
+                >
+                    {line || '\u00A0'}
+                </div>
+            ))}
         </div>
     )
 }
