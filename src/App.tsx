@@ -8,15 +8,16 @@ import Metronome from './components/Metronome'
 
 
 const song: Song = {
+  id: 'mais-que-vencedores',
   title: 'Mais Que Vencedores',
   bpm: 82,
   beatsPerBar: 4,
+
   sections: [
     {
       id: 'intro',
       name: 'Intro',
       bars: 4,
-      dynamics: 'Suave',
       content:
 `C                     G
 Quando estou em Tua presença
@@ -27,15 +28,31 @@ Encontro paz e direção`,
       id: 'verso',
       name: 'Verso',
       bars: 8,
-      dynamics: 'Suave',
       content: '',
     },
     {
       id: 'refrao',
       name: 'Refrão',
       bars: 8,
-      dynamics: 'Forte',
       content: '',
+    },
+  ],
+
+  arrangement: [
+    {
+      id: 'occurrence-1',
+      sectionId: 'intro',
+      dynamics: 'Piano e voz'
+    },
+    {
+      id: 'occurrence-2',
+      sectionId: 'verso',
+      dynamics: 'Baixo entra',
+    },
+    {
+      id: 'occurrence-3',
+      sectionId: 'refrao',
+      dynamics: 'Todos entram forte',
     },
   ],
 }
@@ -46,14 +63,24 @@ function App() {
     'quarter' | 'eighth'
   >('quarter')  
 
+  const currentOccurrence = song.arrangement[currentSection]
+
+  const currentSectionData = song.sections.find(
+    (section) => section.id === currentOccurrence.sectionId
+  )
+
+  if (!currentSectionData) {
+    throw new Error('Seção não encontrada no arranjo da música.')
+  }
+
   const currentSectionDuration = calculateSectionDuration(
     song,
-    song.sections[currentSection],
+    currentSectionData,
   )
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (currentSection < song.sections.length - 1) {
+      if (currentSection < song.arrangement.length - 1) {
         setCurrentSection(currentSection + 1)
       }
     }, currentSectionDuration * 1000)
@@ -70,10 +97,14 @@ function App() {
       <SongInfo song={song} />
 
       <div className="performance-info">
-        <span>{song.sections[currentSection].name}</span>
+        <h2 className="section-title">
+          {currentSectionData.name}
+        </h2>
 
         <div className="performance-controls">
-          <span>{song.sections[currentSection].dynamics}</span>
+          <span className="dynamics-label">
+            {currentOccurrence.dynamics}
+          </span>
 
           <Metronome
             bpm={song.bpm}
@@ -95,12 +126,12 @@ function App() {
       </div>
 
       <LyricLineView
-        content={song.sections[currentSection].content}
+        content={currentSectionData.content}
       />
 
       <button 
         onClick={() => {
-          if (currentSection < song.sections.length -1) {
+          if (currentSection < song.arrangement.length -1) {
             setCurrentSection(currentSection + 1)
           }
         }}
