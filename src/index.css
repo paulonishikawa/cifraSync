@@ -57,7 +57,7 @@ body {
   height: 10px;
   border-radius: 50%;
   background-color: #9ca3af;
-  transition: transform 100ms ease, background-color 100ms ease;
+  transition: transform 60ms ease, background-color 60ms ease;
 }
 
 .metronome-dot.active {
@@ -90,4 +90,17 @@ body {
   border-radius: 6px;
   background-color: #e5e7eb;
   color:#374151;
+ }
+
+ .section-button {
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  padding: 4px;
+ }
+
+ .section-button:hover {
+  text-decoration: underline;
  }

@@ -58,12 +58,13 @@ Encontro paz e direção`,
 }
 
 function App() {
-  const [currentSection, setCurrentSection] = useState(0)
+  const [currentOccurrenceIndex, setCurrentOccurrenceIndex] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(true)
   const [metronomeSubdivision, setMetronomeSubdivision] = useState<
     'quarter' | 'eighth'
   >('quarter')  
 
-  const currentOccurrence = song.arrangement[currentSection]
+  const currentOccurrence = song.arrangement[currentOccurrenceIndex]
 
   const currentSectionData = song.sections.find(
     (section) => section.id === currentOccurrence.sectionId
@@ -79,22 +80,40 @@ function App() {
   )
 
   useEffect(() => {
+    if (!isPlaying) {
+      return
+    }
+
     const timer = setTimeout(() => {
-      if (currentSection < song.arrangement.length - 1) {
-        setCurrentSection(currentSection + 1)
+      if (currentOccurrenceIndex < song.arrangement.length - 1) {
+        setCurrentOccurrenceIndex(currentOccurrenceIndex + 1)
+      } else {
+        setIsPlaying(false)
       }
     }, currentSectionDuration * 1000)
 
     return () => {
       clearTimeout(timer)
     }
-  }, [currentSection, currentSectionDuration])
+  }, [isPlaying, currentOccurrenceIndex, currentSectionDuration])
 
   return (
     <>
       <h1>CifraSync</h1>
 
       <SongInfo song={song} />
+
+      <div className="playback-controls">
+        {isPlaying ? (
+          <button onClick={() => setIsPlaying(false)}>
+            Pausar
+          </button>
+        ) : (
+          <button onClick={() => setIsPlaying(true)}>
+            Play
+          </button>
+        )}
+      </div>
 
       <div className="performance-info">
         <h2 className="section-title">
@@ -109,6 +128,7 @@ function App() {
           <Metronome
             bpm={song.bpm}
             subdivision={metronomeSubdivision}
+            isPlaying={isPlaying}
           />
 
           <select
@@ -131,8 +151,8 @@ function App() {
 
       <button 
         onClick={() => {
-          if (currentSection < song.arrangement.length -1) {
-            setCurrentSection(currentSection + 1)
+          if (currentOccurrenceIndex < song.arrangement.length -1) {
+            setCurrentOccurrenceIndex(currentOccurrenceIndex + 1)
           }
         }}
       >
@@ -141,7 +161,9 @@ function App() {
 
       <SectionList 
         sections={song.sections}
-        currentSection={currentSection}
+        arrangement={song.arrangement}
+        currentOccurrenceIndex={currentOccurrenceIndex}
+        onSelectOccurrence={setCurrentOccurrenceIndex}
       />
     </>
   )

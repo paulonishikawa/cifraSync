@@ -1,23 +1,46 @@
-import type { Section as SectionType } from '../types/song'
+import type { 
+    Section as SectionType,
+    SectionOccurrence,
+} from '../types/song'
+
 import Section from './Section'
 
 type SectionListProps = {
     sections: SectionType[]
-    currentSection: number
+    arrangement: SectionOccurrence[]
+    currentOccurrenceIndex: number
+    onSelectOccurrence: (index: number) => void
 }
 
-function SectionList({ sections, currentSection }: SectionListProps) {
+function SectionList({
+    sections,
+    arrangement,
+    currentOccurrenceIndex,
+    onSelectOccurrence,
+ }: SectionListProps) {
     return (
         <>
             <h3>Seções</h3>
 
             <ul>
-                {sections.map((section, index) => (
+                {arrangement.map((occurrence, index) => {
+                    const section = sections.find(
+                        (item) => item.id === occurrence.sectionId
+                    )
+
+                if (!section) {
+                    return null
+                }
+
+                return (
                     <Section
-                        key={section.name}
+                        key={occurrence.id}
                         section={section}
-                        isActive={index === currentSection} />
-                ))}
+                        isActive={index === currentOccurrenceIndex}
+                        onSelect={() => onSelectOccurrence(index)}
+                    />
+                )
+                })}
             </ul>
         </>
     )
