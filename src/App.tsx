@@ -145,9 +145,11 @@ function App() {
         </div>
       </div>
 
-      <LyricLineView
-        content={currentSectionData.content}
-      />
+      <div className="performance-display">
+        <LyricLineView
+          content={currentSectionData.content}
+        />
+      </div>
 
       <button 
         onClick={() => {

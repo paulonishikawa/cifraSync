@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react'
 type MetronomeProps = {
     bpm: number
     subdivision: 'quarter' | 'eighth'
+    isPlaying: boolean
 }
 
-function Metronome({ bpm, subdivision }: MetronomeProps) {
+function Metronome({ bpm, subdivision, isPlaying }: MetronomeProps) {
     const [isActive, setIsActive] = useState(false)
     
     const interval = 60000 / bpm / (
@@ -13,14 +14,26 @@ function Metronome({ bpm, subdivision }: MetronomeProps) {
     )
 
     useEffect(() => {
+        if (!isPlaying) {
+            setIsActive(false)
+            return
+        }
+
+        let pulseTimer: ReturnType<typeof setTimeout>
+        
         const timer = setInterval(() => {
-            setIsActive((previous) => !previous)
+            setIsActive(true)
+            
+            pulseTimer = setTimeout(() => {
+                setIsActive(false)
+            }, 100)
         }, interval)
 
         return () => {
             clearInterval(timer)
+            clearTimeout(pulseTimer)
         }
-    }, [interval])
+    }, [interval, isPlaying])
 
     return (
         <div className="metronome">
